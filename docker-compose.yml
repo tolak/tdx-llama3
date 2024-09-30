@@ -1,0 +1,35 @@
+services:
+  llama3:
+      image: ollama/ollama:latest
+      ports:
+        - 11434:11434
+      container_name: llama3
+      pull_policy: always
+      tty: true
+      restart: always
+      environment:
+        - OLLAMA_KEEP_ALIVE=24h
+        - OLLAMA_HOST=0.0.0.0
+      volumes:
+        - ./ollama/ollama:/root/.ollama
+        - ./run-llama3.sh:/usr/local/bin/run-llama3.sh
+      entrypoint: ["/bin/bash", "-c", "/usr/local/bin/run-llama3.sh"]
+      networks:
+        - llama3-network
+  signproxy:
+    image: signproxy
+    ports:
+      - 1213:3000
+    container_name: signproxy
+    environment:
+        - LLAMA3_ENDPOINT=http://host.docker.internal:11434/api/chat
+    depends_on:
+      - llama3
+    networks:
+      - llama3-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  llama3-network:
+    external: false

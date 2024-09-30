@@ -1,0 +1,15 @@
+{
+    "name": "llama3-proxy",
+    "version": "1.0.0",
+    "description": "A proxy service for forwarding requests to Llama3 and adding a signature.",
+    "main": "sign-proxy.js",
+    "scripts": {
+        "start": "node sign-proxy.js"
+    },
+    "dependencies": {
+        "axios": "^0.21.1",
+        "body-parser": "^1.19.0",
+        "ethers": "^6.13.2",
+        "express": "^4.17.1"
+    }
+}
